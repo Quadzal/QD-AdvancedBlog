@@ -1,0 +1,45 @@
+{% extends './base.html' %}
+{% load i18n %}
+
+{% block meta %}
+    <meta name="description" content="Home">
+{% endblock meta %}
+
+{% load custom_tags %}
+
+{% block title %} My Favourite Comments {% endblock title %}
+
+{% block content %}
+
+  <main class="main-content">
+
+    <section class="section bg-gray p-0">
+
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-10 col-xl-9 mx-auto">
+                {% for comment in comments %}
+                    <div class="card hover-shadow-7 my-8" name="card">
+                        <div class="row">
+
+                            <div class="col-md-8">
+                                <div class="p-7">
+
+                                    <h4><img src="{{ comment.author.profile.image_url }}" width="32px" height="32px"> {{ comment.author }}</h4>
+                                    <p>{{ comment.content }}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-danger my-8">Favori {% trans "Comments Not Found" %}!</div>
+                {% endfor %}
+            </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock content %}
