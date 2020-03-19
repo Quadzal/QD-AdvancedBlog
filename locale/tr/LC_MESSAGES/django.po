@@ -109,3 +109,21 @@ msgstr "Yorum"
 
 msgid "Logout"
 msgstr "Çıkış Yap"
+
+msgid "Popular Posts"
+msgstr "Popüler Gönderiler"
+
+msgid "Category"
+msgstr "Kategori"
+
+msgid "Do you have an account?"
+msgstr "Bir hesaba sahip misiniz?"
+
+msgid "Sign in here!"
+msgstr "Giriş yapın!"
+
+msgid "Don't have an account?"
+msgstr "Bir hesaba sahip değil misiniz?"
+
+msgid "Sign up here!"
+msgstr "Kayıt Olun!"

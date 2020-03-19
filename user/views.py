@@ -1,21 +1,7 @@
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView
 from .forms import ProfileForm, CustomUserChangeForm
 from .models import UserProfile
-# Create your views here.
-
-class HomeMixin:
-    context_object_name = "posts"
-    template_name       = "home/home.html"
-    paginate_by         = 10
-
-class MyLoginRequiredMixin(LoginRequiredMixin):
-    login_url = "/accounts/login"
 
 
 class ProfileView(UpdateView):
@@ -38,27 +24,28 @@ class ProfileView(UpdateView):
         return UserProfile.objects.get(user=self.request.user)
 
 
-class FavouritePosts(MyLoginRequiredMixin, HomeMixin, ListView):
+class FavouritePosts(LoginRequiredMixin, ListView):
+    login_url = "/accounts/login"
+    context_object_name = "posts"
+    template_name = "home/home.html"
+    paginate_by = 10
+
     def get_queryset(self):
-        user = UserProfile\
-            .objects\
-            .prefetch_related("favourite_posts")\
-            .get(user=self.request.user)
+        user = UserProfile.objects.prefetch_related("favourite_posts").get(user=self.request.user)
 
         if user:
             favourite_posts = user.favourite_posts.all()
             return favourite_posts
 
 
-class FavouriteComments(MyLoginRequiredMixin, ListView):
+class FavouriteComments(LoginRequiredMixin, ListView):
+    login_url = "/accounts/login"
     context_object_name = "comments"
     template_name = "home/favourite_comments.html"
+    paginate_by = 10
 
     def get_queryset(self):
-        user = UserProfile\
-            .objects\
-            .prefetch_related("favourite_comments")\
-            .get(user=self.request.user)
+        user = UserProfile.objects.prefetch_related("favourite_comments").get(user=self.request.user)
 
         if user:
             favourite_posts = user.favourite_comments.all()

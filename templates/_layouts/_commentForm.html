@@ -1,15 +1,10 @@
 {% load custom_tags %}
 {% load i18n %}
-<style>
-    hr{
-        border-width: 2px;
-        border-color: #333333;
-    }
-</style>
-<div class="section bg-gray">
+
+<div class="section bg-gray pt-7">
     <div class="container">
 
-        <div class="row">
+        <div class="row ml-5">
 
             <div class="col-lg-8 mx-auto">
             <!-- Comment Form -->
@@ -21,10 +16,8 @@
                     </div>
                     <button class="btn btn-primary btn-block" type="button" onclick="addComment()">{% trans "Submit your comment." %}</button>
                     </form>
-                    <hr>
                 {% else %}
                     <div class="alert alert-danger">{% trans "Please Login Before Commenting." %}</div>
-                    <hr>
                 {% endif %}
             <!-- ./Comment Form -->
             </div>
@@ -70,7 +63,7 @@
                 <hr>
                 {% empty %}
                     <div class="alert alert-danger">
-                        {% trans "Comments Not Found." %}
+                        {% trans "Comments Not Found" %}
                     </div>
                     <div class="alert alert-success">
                         {% trans "Be the first to comment." %}
@@ -89,8 +82,9 @@
     var csrf_token = "{{ csrf_token }}";
     function addComment() {
         var content = $("#content").val();
-        $.post("/add/comment", { content: content, post: post_id, csrfmiddlewaretoken: csrf_token }, (data, textStatus) => {
-
+        var language_code = "{{request.LANGUAGE_CODE}}";
+        $.post("/" + language_code + "/add/comment", { content: content, post: post_id, csrfmiddlewaretoken: csrf_token }, (data, textStatus) => {
+            console.log(data)
             if (data.comment) {
                 $("#comments .alert-danger").remove();
                 $("#comments").prepend(
@@ -113,6 +107,7 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
                     `
                 );
                 setTimeout(() => {

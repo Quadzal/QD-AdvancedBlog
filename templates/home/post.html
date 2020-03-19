@@ -13,6 +13,12 @@
     body{
         word-break: break-word;
     }
+
+    hr{
+        border-width: 2px!important;
+        border-color: #333333!important;
+    }
+
     </style>
 {% endblock head %}
 
@@ -25,9 +31,11 @@
 {% block content %}
 <main class="main-content">
     
-    <div class="section">
+    <div class="section pb-0">
         <div class="container">
-
+            <div class="text-center my-0">
+                <img class="rounded-md w-100" src="/media/{{ post.image }}" alt="...">
+            </div>
             <!-- Post Header -->
             <div class="text-center mt-8">
 
@@ -35,37 +43,40 @@
                 <p class="nav-link">
                     <a href="{% url 'author' username=post.author %}">{{ post.author }} </a>
                     {% trans "Posted" %} {{ post.created_date|timesince }} {% trans "ago"  %} |
-                    <a href="{% url 'category' category_name=post.category %}">{{ post.category }}</a>
                     {% if request.user.is_authenticated %}
                         {% if post in user.profile.favourite_posts.all %}
                             <button class="btn p-0 font-size-15"><i class="fas fa-star color-yellow hover-grey" id="favourite_post"></i></button>
+                            {{ post.number_of_favourite }}
                         {% else %}
                             <button class="btn p-0 font-size-15"><i class="fas fa-star hover-yellow" id="favourite_post"></i></button>
+                            {{ post.number_of_favourite }}
                         {% endif %}
 
                     {% endif %}
-
+                    <hr class="w-60">
                 </p>
             </div>
 
             <!-- ./Post Header -->
 
             <!-- Post content !-->
-            <div class="row">
+            <div class="row ml-5">
                 <div class="col-lg-8 mx-auto">
-                    <div class="text-center my-8">
-                        <img class="rounded-md" src="/media/{{ post.image }}" alt="...">
-                    </div>
+
                     {{ post.content|safe }}
                 </div>
+
             </div>
             <!-- ./Post content -->
 
             <!-- Tags -->
-            <div class="row">
-                <div class="col-lg-8 mx-auto mt-0">
+            <div class="row ml-5 ">
+                <div class="col-lg-8 mx-auto">
 
                     <div class="gap-xy-2 mt-6">
+                        {% trans "Category" %}:
+                        <a class="badge badge-pill badge-secondary" href="{% url 'category' category_name=post.category %}">{{ post.category }}</a>
+                        <br>
                         {% trans "Tags:" %}
                         {% for tag in post.tags_list %}
                             <a class="badge badge-pill badge-secondary" href="{% url 'tag_posts' tag=tag %}">{{ tag }}</a>
@@ -74,7 +85,7 @@
                 </div>
             </div>
             <!-- ./Tags -->
-
+            <hr class="w-60">
         </div>
     </div>
 
@@ -85,13 +96,14 @@
 
 {% endblock content %}
 {% block script %}
+
 <script>
     var csrf_token = "{{ csrf_token }}";
     $("#favourite_post").click(() => {
         let language_code = "{{ request.LANGUAGE_CODE }}";
         $.post("/" + language_code + "/favourite/post", {user:"{{ request.user }}", post_title:"{{ post.title }}", csrfmiddlewaretoken:csrf_token}, (data,textStatus) => {
             if(data.code === "success"){
-                location.reload()
+                location.reload();
             }
         })
     });

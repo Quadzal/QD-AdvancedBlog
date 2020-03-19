@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+
 class Category(models.Model):
     title = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
