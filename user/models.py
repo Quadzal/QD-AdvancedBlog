@@ -18,7 +18,7 @@ class UserProfile(models.Model):
         if self.profile_image:
             return base_image_path + self.profile_image.name
 
-        default_image_path = base_image_path + f"default_profile_images/{self.user.username[0]}.png"
+        default_image_path = base_image_path + "default_profile_images/"+self.user.username[0]+".png"
 
         return default_image_path
 
